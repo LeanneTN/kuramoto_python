@@ -92,4 +92,24 @@ class Kuramoto:
         temp_sum = sum([(np.e ** (1j * i)) for i in angles_vectors])
         return abs(temp_sum / len(angles_vectors))
 
+    def mean_frequency(self, act_matrix, adj_matrix):
+        '''
+        average frequency within the time window (namely self.T) for all nodes
+        :param act_matrix: np array, the integrated adjacent matrix
+        :param adj_matrix: adjacent matrix, np array
+        :return: np array 2D/1D
+        '''
+        assert len(adj_matrix) == act_matrix.shape[0], 'adjacent matrix does not match act matrix'
+        _, n_steps = act_matrix.shape
+
+        # compute derivative for all nodes in all time steps
+        dx_dt = np.zeros_like(act_matrix)
+        for time in range(n_steps):
+            dx_dt[:, time] = self.derivative(act_matrix[:, time], None, adj_matrix)
+
+        # integrate every node over the timing window T
+        integrates = np.sum(dx_dt * self.dt, axis=1)
+        # average across complete time window - mean angular velocity
+        mean_freq = integrates / self.T
+        return mean_freq
 
