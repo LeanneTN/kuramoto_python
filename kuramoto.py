@@ -66,15 +66,30 @@ class Kuramoto:
 
     def run(self, adj_matrix=None, angle_vectors=None):
         '''
-
+        this function is for run the script
         :param adj_matrix: adjacent matrix, nd array
         2D: show the connectivity of each node
-        1D: states vectors of nodes shows the position in radians
         :param angle_vectors: angle vectors
+        1D: states vectors of nodes shows the position in radians
         :return: integrated matrix, 2D nd array
         '''
         if angle_vectors is None:
             angle_vectors = self.init_angles()
 
         return self.integrate(angle_vectors, adj_matrix)
+
+    @staticmethod
+    def phase_coherence(angles_vectors):
+        '''
+        this function is for compute global order parameter, namely Rt in
+        original equation
+        the original equation of Rt is under the image directory and named
+        with order_parameter
+        :param angles_vectors: np array
+        :return: np array
+        '''
+        # 1j为虚数单位
+        temp_sum = sum([(np.e ** (1j * i)) for i in angles_vectors])
+        return abs(temp_sum / len(angles_vectors))
+
 
