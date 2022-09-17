@@ -20,4 +20,5 @@ def csv_to_np(filename):
     :return: numpy array
     """
     data = pd.read_csv(filename)
+    data = np.array(data)
     return data
